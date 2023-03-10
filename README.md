@@ -5,7 +5,7 @@ Given a FASTA file containing a set of sequencing reads and a file containing a 
 Researchers may want to search a genome for a sequence of interest to verify a knockin/out experiment, relate one organism to another based on the shared presence (or absence) of a specific gene, to identify regulatory regions surrounding a gene to name a few scenarios. However, if they are studying an organism that is not widely studied and a reference genome does not exist, one must assemble the genome using only the sequencing reads to perform the aforementioned searches. This is called de novo genome assembly. During sequencing, the DNA of the organism is fragmented and each short fragment is sequenced. The copies of these fragments, or sequencing reads, need to be arranged in the correct order (and orientation) to get back the original sequence. One way to do this is by constructing a de Bruijn graph in which each node is a sequence of length k. When each node is visited once, the graph is able to reconstruct long stretches of the sequence. A bloom filter can be used to search the reads for the query sequence.
 
 ## Installation Instructions
-
+Download all files to local computer. 
 ### Dependencies
 This program is written in Python version 3.10.8, and has the following dependencies:
 
