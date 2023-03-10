@@ -1,0 +1,14 @@
+>one
+ABC
+>two
+DEF
+>three
+GHIJ
+>four
+ABC
+>five
+GHI
+>six
+GHI
+>seven
+ABC
