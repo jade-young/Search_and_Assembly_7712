@@ -1,13 +1,20 @@
+""" Description: Unit tests for the bloom filter functions and class.
+"""
 import unittest
 from bloom_filter import *
 
 class TestInput(unittest.TestCase):
+    ''' Verify that the calculations are as expected.
+    '''
     def test_get_m(self):
         self.assertEqual(get_m(100, 0.01), 959)
 
     def test_get_k(self):
         self.assertEqual(get_k(100, 959), 7)
 
+    '''Test to make sure the bloom filter is able accurately distinguish from items it has seen 
+    and items it hasn't seen... for the most part...
+    '''
     def test_bloom_filter_class(self):
         bf = BloomFilter(959, 7)
         bf.add("SEQUENCE")

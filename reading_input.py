@@ -1,9 +1,18 @@
+"""Description: Functions related to reading input as well as exploring the read 
+count and length distributions.
+"""
+
 import matplotlib.pyplot as plt 
 import numpy as np
 import pandas as pd
 
 # module 1: read in fasta file and query file
-def read_fasta(reads_file_name):
+'''
+Read in FASTA file contatining the sequencing reads
+Input: STRING reads_file_name
+Output: DICTIONARY sequence_dictionary, where key is a sequence ID and value is corresponding sequence
+'''
+def read_reads(reads_file_name):
     sequence_dictionary = {}
     with open(reads_file_name) as file:
         while True:
@@ -14,6 +23,11 @@ def read_fasta(reads_file_name):
             if not sequence: break
     return sequence_dictionary
 
+'''
+Read in FASTA file contatining the initial query
+Input: STRING query_file_name
+Output: DICTIONARY query_dictionary, where key is a sequence ID and value is corresponding sequence
+'''
 def read_query(query_file_name):
     query_dictionary = {}
     with open(query_file_name) as file:
@@ -27,8 +41,13 @@ def read_query(query_file_name):
 
 # EXPLORE
 # 1. report the count distribution 
-# will also help to choose a threshold for the filtering step during error correction later
-
+# could also help to choose a threshold for the filtering step during error correction later
+'''
+Record the frequency of each read and store in a dictionary
+Then plot the read count on a barplot
+Input: DICTIONARY read_dict (output from read_reads function)
+Output: bar plot
+'''
 def assess_read_count_distribution(read_dict):
     # first get a dictionary that records the number of times each unique sequence appears in the reads dictionary
     read_count = {} # where each key is a read and the value is the count (MAYBE THE KEY SHOULD BE THE ID?)
@@ -39,13 +58,10 @@ def assess_read_count_distribution(read_dict):
         else:
             read_count[sequence] = 1
 
-    #print("Max read count: ", max(read_count.values()))
-    #print("Min read count: ", min(read_count.values()))
-
     # look at the read count distribution (before error correction if applicable)
     # sort the dictionary entries by ascending read count
     read_count_dict_sorted = dict(sorted(read_count.items(),key=lambda x:x[1]))
-    # plot a histogram of the read count distribution
+    # plot the read count distribution
     ##plt.bar(list(read_count_dict_sorted.keys()), read_count_dict_sorted.values(), 1.0, color='g', tick_label = None)
     read_count_sorted_list = [key for key, val in read_count_dict_sorted.items() for _ in range(val)] # need a list for the hist function
     df = pd.DataFrame(list(read_count_dict_sorted.items()), columns=['Sequence', 'Frequency'])
@@ -62,6 +78,12 @@ def assess_read_count_distribution(read_dict):
 
 # 2. report read length distribution 
 # could help to also establish a read length threshold to further filter the reads
+'''
+Record the frequency of each read unique read lengthand store in a dictionary
+Then plot the read length on a barplot.
+Input: DICTIONARY read_dict (output from read_reads function)
+Output: bar plot
+'''
 def assess_read_length_distribution(read_dict):
     read_length_dict = {}
     for key in read_dict.keys():
@@ -71,11 +93,8 @@ def assess_read_length_distribution(read_dict):
         else:
             read_length_dict[read_length] = 1
     
-    #print("Max read length: ", max(read_length_dict.keys()))
-    #print("Min read length: ", min(read_length_dict.keys()))
-    #print("Avg read length: ", sum(read_length_dict.keys()) / len(read_length_dict))
     # look at the read length distribution (before error correction if applicable)
-    # sort the dictionary entries by ascending read length
+    # sort the dictionary entries by read length
     read_length_dict_sorted = dict(sorted(read_length_dict.items(),key=lambda x:x[1], reverse = True))
     
     #read_length_sorted_list = [val for key, val in read_length_dict_sorted.items() for _ in range(val)]

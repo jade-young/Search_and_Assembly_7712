@@ -41,7 +41,7 @@ ZZZZZZZ
 ### Output
 The current output should be 4 figures:
 
-+ a barplot showing the read count frequency
-+ a barplot showing the read length frequency
-+ a plot showing the relationship between false positive rates and array sizes
-+ a plot showing the relationship between array sizes and number of hash functions
++ a barplot showing the read count frequency ("read_count_dist_plot.pdf")
++ a barplot showing the read length frequency ("read_length_dist_plot.pdf")
++ a plot showing the relationship between false positive rates and array sizes ("FPR_array_size_plot.pdf")
++ a plot showing the relationship between array sizes and number of hash functions ("num_hash_array_size_plot.pdf")
