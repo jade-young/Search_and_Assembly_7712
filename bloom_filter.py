@@ -1,10 +1,9 @@
 """Description: Functions for exploring the optimal array size for the bloom filter as well as
-number of hash functions. Class for BloomFilter object
+number of hash functions. Class for BloomFilter object.
 """
 import numpy as np
 import matplotlib.pyplot as plt
 import math
-import hashlib
 # Portion of search module...
 
 # EXPLORE
@@ -63,7 +62,8 @@ def get_k(n, m):
 '''
 class BloomFilter:
     '''BloomFilter object has a size, number of hash functions, and an array
-    Output: BloomFilter ibject
+    Input: INT array_size, the size of the array to use as filter; INT num_hash_functions, number of hash functions to use
+    Output: BloomFilter object
     '''
     def __init__(self, array_size, num_hash_functions):
         # intialize the array size and the number of hash functions for the new bl0om filter object
@@ -81,11 +81,6 @@ class BloomFilter:
     Output: INTEGER value, the array index
     '''
     def _hash(self, seq, seed):
-        #value = 0
-        #for char in seq:
-        #    value = (value * seed) + ord(char) # ord
-        #hashed_string = hashlib.sha256(str.encode(str(seq) + str(seed))).hexdigest() # hash the sequence and convert it to a hexadecimal string (16 digits)
-        #value = int(hashed_string, 16) # convert the resulting hexadecimal to an integer
         return hash(seq + seed) % self.array_size # use modulo so the value is not larger than the array
     
     '''Function to add a sequence to the bloom filter by changing specific indices in the array from 0 to 1
