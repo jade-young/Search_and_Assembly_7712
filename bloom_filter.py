@@ -4,6 +4,7 @@ number of hash functions. Class for BloomFilter object
 import numpy as np
 import matplotlib.pyplot as plt
 import math
+import hashlib
 # Portion of search module...
 
 # EXPLORE
@@ -57,6 +58,7 @@ def get_k(n, m):
     k = math.ceil((m/n) * np.log(2)) # round up to nearest whole number
     return k
 
+
 ''' Class for BloomFilter object
 '''
 class BloomFilter:
@@ -64,34 +66,42 @@ class BloomFilter:
     Output: BloomFilter ibject
     '''
     def __init__(self, array_size, num_hash_functions):
+        # intialize the array size and the number of hash functions for the new bl0om filter object
         self.array_size = array_size
         self.num_hash_functions = num_hash_functions
-        self.array = np.zeros(array_size, dtype=np.int8)
+        # and set all of the values in the array to False
+        self.array = np.zeros(self.array_size, dtype=bool)
+        # set the salt values, or seeds (value to be added to the sequence to create a pseudo family of hash functions)
+        # bloom filters require that each sequence being added is hashed multiple times to prevent collision
+        # the salt value corresponds to each hash function in the "family" used to hash the sequence
+        self.salt_values = range(num_hash_functions)
 
     '''Hash function to get array indices in the bloom filter for this specific sequence
     Input: STRING seq, the sequence being hashed; INT seed, the hash function number
     Output: INTEGER value, the array index
     '''
     def _hash(self, seq, seed):
-        value = 0
-        for char in seq:
-            value = (value * seed) + ord(char)
-        return value % self.array_size
+        #value = 0
+        #for char in seq:
+        #    value = (value * seed) + ord(char) # ord
+        #hashed_string = hashlib.sha256(str.encode(str(seq) + str(seed))).hexdigest() # hash the sequence and convert it to a hexadecimal string (16 digits)
+        #value = int(hashed_string, 16) # convert the resulting hexadecimal to an integer
+        return hash(seq + seed) % self.array_size # use modulo so the value is not larger than the array
     
     '''Function to add a sequence to the bloom filter by changing specific indices in the array from 0 to 1
     Input: STRING seq, the sequence being added
     '''
     def add(self, seq):
-        for h in range(self.num_hash_functions):
-            result = self._hash(seq, h)
-            self.array[result] = 1
+        for hash_func in self.salt_values:
+            hash_result = self._hash(seq, hash_func) # hash the sequence being added
+            self.array[hash_result] = 1 # set the element at the hash_result - th index to 1 (the sequence has been added/"seen")
             
     '''Function to check if a sequence has been added to/seen by the bloom filter
     Input: STRING seq, the sequence of interest
     '''
     def check(self, seq):
-        for h in range(self.num_hash_functions):
-            result = self._hash(seq, h)
-            if self.array[result] == 0:
-                return False
-        return True
+        for hash_func in self.salt_values:
+            hash_result = self._hash(seq, hash_func) # hash the sequence of interest
+            if self.array[hash_result] == 0: # check if the element at the hash_result - th index of the array is 0 
+                return False # if so, then we can stop and return False because the sequence definitely is not in the bloom filter
+        return True # if all of the elements are True then the sequence is (likely) in the bloom filter
