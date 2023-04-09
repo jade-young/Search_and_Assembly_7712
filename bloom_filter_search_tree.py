@@ -41,27 +41,34 @@ class BloomFilterSearchTree:
     def add(self, seq):
         # first get the kmers for the sequence
         seq_kmers = self._get_kmers(seq)
+        # then define the overlap we want between the kmers
+        # one way is to have the overlap be the length of the sequence - k
+        #overlap = len(seq) - self.k
+
         # construct nodes by overlapping the sequence kmers
         # pre/suffix overlap the kmer by one base to aid in the construction of the de bruijn graph
         for i in range(len(seq_kmers)):
-            if i == 0 : # if it is the first kmer
-                prefix == "" #then don't add anything to the front of the kmer
-            else: 
-                prefix = seq_kmers[i-1][-self.k+1:]
-            if i == len(seq_kmers) - 1: # if it is the last kmer
-                suffix = "" #then don't add anything to the end of the kmer
-            else:
-                suffix = seq_kmers[i+1][:self.k-1]
-            node = prefix + seq_kmers[i] + suffix
+            prefix = seq[:i] 
+            suffix = seq[i + self.k:] 
+            node = prefix + suffix # concatenate to create a node
             if node not in self.bloom_filter_search_tree: 
                 self.bloom_filter_search_tree[node] = BloomFilter(self.array_size, self.num_hash_functions)
             self.bloom_filter_search_tree[node].add(seq_kmers[i])
 
     """Function to check if a sequence is in the bloom filter search tree
-    Input: STRING seq, the sequence of interest/query
+    Input: STRING query, the sequence of interest/query
     Output: BOOL eval, True if the sequence is (likely) in the tree and False if it is not """
-    def check(self, seq):
-        # loop through the bloom filters
-        for pointer, bloom_filter in enumerate(self.bloom_filters):
-            if bloom_filter.check(seq): # call the bloom filter's check function
-                index = bisect.bisect_left()
+    def check(self, query):
+        query_kmers = self._get_kmers(query)
+        for i in range(query_kmers):
+            prefix = query[:i] 
+            suffix = query[i + self.k:] 
+            node = prefix + suffix
+            if node not in self.bloom_filter_search_tree:
+                return False
+            elif self.bloom_filter_search_tree[node].check(query_kmers[i]) == False:
+                return False
+            else:
+                continue
+        return True
+            
