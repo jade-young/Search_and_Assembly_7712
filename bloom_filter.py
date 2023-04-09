@@ -81,7 +81,7 @@ class BloomFilter:
     Output: INTEGER value, the array index
     '''
     def _hash(self, seq, seed):
-        return hash(seq + seed) % self.array_size # use modulo so the value is not larger than the array
+        return (hash(seq) + seed) % self.array_size # use modulo so the value is not larger than the array
     
     '''Function to add a sequence to the bloom filter by changing specific indices in the array from 0 to 1
     Input: STRING seq, the sequence being added

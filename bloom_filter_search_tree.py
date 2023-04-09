@@ -48,9 +48,12 @@ class BloomFilterSearchTree:
         # construct nodes by overlapping the sequence kmers
         # pre/suffix overlap the kmer by one base to aid in the construction of the de bruijn graph
         for i in range(len(seq_kmers)):
-            prefix = seq[:i] 
-            suffix = seq[i + self.k:] 
-            node = prefix + suffix # concatenate to create a node
+            #prefix = seq[:i] 
+            #suffix = seq[i + self.k:] 
+            #node = prefix + suffix # concatenate to create a node
+            
+            node = seq_kmers[i]
+            print(node)
             if node not in self.bloom_filter_search_tree: 
                 self.bloom_filter_search_tree[node] = BloomFilter(self.array_size, self.num_hash_functions)
             self.bloom_filter_search_tree[node].add(seq_kmers[i])
@@ -60,15 +63,33 @@ class BloomFilterSearchTree:
     Output: BOOL eval, True if the sequence is (likely) in the tree and False if it is not """
     def check(self, query):
         query_kmers = self._get_kmers(query)
-        for i in range(query_kmers):
-            prefix = query[:i] 
-            suffix = query[i + self.k:] 
-            node = prefix + suffix
+        print(query_kmers)
+        print(query)
+        for i in range(len(query_kmers)):
+            #prefix = query[:i] 
+            #suffix = query[i + self.k:] 
+            #prefix = query[i + self.k:]
+            #suffix = query[:i]  
+            #if i == 0:
+            #    prefix = ""
+            #else:
+            #    prefix = query_kmers[i-1][-1]
+            #if i == (len(query_kmers) - 1):
+            #    suffix = ""
+            #else:
+            #    suffix = query_kmers[i+1][0]
+            #print(prefix)
+            #print(suffix)
+            #node = prefix + query_kmers[i] + suffix
+            node = query_kmers[i]
+            print(node)
+            #print("/n")
             if node not in self.bloom_filter_search_tree:
                 return False
-            elif self.bloom_filter_search_tree[node].check(query_kmers[i]) == False:
+            if self.bloom_filter_search_tree[node].check(query_kmers[i]) == False:
+            #if node not in self.bloom_filter_search_tree and (self.bloom_filter_search_tree[node].check(query_kmers[i]) == False):
                 return False
-            else:
-                continue
+            #else:
+                #continue
         return True
             
