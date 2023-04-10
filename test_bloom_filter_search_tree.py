@@ -9,7 +9,6 @@ class TestInput(unittest.TestCase):
         temp = BloomFilterSearchTree(3, 20, 2)
         observed = temp._get_kmers("ACTGCTA")
         self.assertEqual(expected, observed)
-        self.assertEqual(expected, observed)
 
     def test_check(self):
         temp = BloomFilterSearchTree(3, 20, 2)
