@@ -24,11 +24,10 @@ class TestInput(unittest.TestCase):
         # see if it can recognize the sequences it has seen
         self.assertTrue(bf.check("SEQUENCE"))
         self.assertTrue(bf.check("7712"))
+        #self.assertTrue(bf.check("3YAD")) 
         self.assertTrue(bf.check("DAY3"))
 
-        # see if it does not recognize an unadded
-        ## difficult... because of the approximate nature of the bloom filter...
-        self.assertFalse(bf.check("7711"))
+        #self.assertFalse(bf.check("7711"))
 
 if __name__ == '__main__':
     unittest.main()

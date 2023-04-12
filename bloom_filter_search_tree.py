@@ -53,7 +53,7 @@ class BloomFilterSearchTree:
             #node = prefix + suffix # concatenate to create a node
             
             node = seq_kmers[i]
-            print(node)
+            #print(node)
             if node not in self.bloom_filter_search_tree: 
                 self.bloom_filter_search_tree[node] = BloomFilter(self.array_size, self.num_hash_functions)
             self.bloom_filter_search_tree[node].add(seq_kmers[i])
@@ -63,8 +63,8 @@ class BloomFilterSearchTree:
     Output: BOOL eval, True if the sequence is (likely) in the tree and False if it is not """
     def check(self, query):
         query_kmers = self._get_kmers(query)
-        print(query_kmers)
-        print(query)
+        #print(query_kmers)
+        #print(query)
         for i in range(len(query_kmers)):
             #prefix = query[:i] 
             #suffix = query[i + self.k:] 
@@ -82,7 +82,7 @@ class BloomFilterSearchTree:
             #print(suffix)
             #node = prefix + query_kmers[i] + suffix
             node = query_kmers[i]
-            print(node)
+            #print(node)
             #print("/n")
             if node not in self.bloom_filter_search_tree:
                 return False

@@ -23,6 +23,8 @@ import pandas as pd
 import unittest
 import reading_input # import functions from read_input.py
 from bloom_filter import * # import functions from bloom_filter.py
+from bloom_filter_search_tree import * # import functions from bloom_filter_search_tree.py
+from de_bruijn_graph import *
 
 # main function driver code
 ## TODO: include command line arguments so the end user can input their own files as well as specify their desired false positive rate, output directories, and whether or not to produce the exploration plots
@@ -39,10 +41,10 @@ def main():
 
     # EXPLORE
     # 1. look at the read count distribution
-    reading_input.assess_read_count_distribution(sequence_dict) # produces bar plot
+    #reading_input.assess_read_count_distribution(sequence_dict) # produces bar plot
 
     # 2. look at the read length distribution
-    reading_input.assess_read_length_distribution(sequence_dict) #produces bar plot
+    #reading_input.assess_read_length_distribution(sequence_dict) #produces bar plot
 
     ## CREATE BLOOM FILTER
     # EXPLORE
@@ -58,12 +60,22 @@ def main():
     # get optimal number of hash functions
     num_functions = get_k(num_seq, num_seq)
 
-    # initialize bloom filter object
-    bloom_filter = BloomFilter(array_size, num_functions)
-    # add the read sequences to the bloom filter
+    # initialize bloom filter search tree object
+    bloom_filter_search_tree = BloomFilterSearchTree(20, array_size, num_functions)
+    # add the read sequences to the bloom filter search tree
     for sequence in sequence_dict.values():
-        bloom_filter.add(sequence)
+        bloom_filter_search_tree.add(sequence)
 
+    # check if the query is in the sequencing reads
+    longest_contig = ""
+    for query in query_dict.values():
+        query_result = bloom_filter_search_tree.check(query)
+        if query_result == True:
+            # if the sequence is found then use the de bruijn graph class to construct the contig
+            graph = DeBruijnGraph(sequence_dict, 20)
+            longest_contig = graph.get_longest_contig(query)
+        print(longest_contig)
+        #TODO: implement the method for returning the results to the user
 
 if __name__ == '__main__':
     main()

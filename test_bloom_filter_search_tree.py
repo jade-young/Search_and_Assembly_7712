@@ -15,6 +15,8 @@ class TestInput(unittest.TestCase):
         temp.add("ACTGC")
         self.assertTrue(temp.check("CTG"))
         self.assertFalse(temp.check("JADE"))
+        #self.assertTrue(temp.check("GTC"))
+
 
 if __name__ == '__main__':
     unittest.main()
